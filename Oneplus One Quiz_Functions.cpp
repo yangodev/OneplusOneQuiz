@@ -276,6 +276,7 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
         do
         {
             cout << "Enter answers as they are written normally." << endl;
+            cout << "You can leave the game. You have to write only 'Exit'." << endl;
             int repeat = 0;
             *p_nextlevel = false;
             nextquestion = false;
@@ -442,8 +443,8 @@ void Game_Hard(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
     {
         do
         {
-            cout << "Enter answers as they are written normally. Tender figures quite!" << endl;
-            cout << "(for example: 100 = one hundred)" << endl;
+            cout << "Enter answers as they are written normally." << endl;
+            cout << "You can leave the game. You have to write only 'Exit'." << endl;
             int repeat = 0,
             *p_nextlevel = false;
             nextquestion = false;
@@ -588,15 +589,16 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
     string filename2 = "Save_Answers.txt";
     fstream Source_Target1;
     fstream Source_Target2;
-    Source_Target1.open(filename1.c_str(), ios::in | ios:: out);
-    Source_Target2.open(filename2.c_str(), ios::in | ios:: out);
+    Source_Target1.open(filename1.c_str());
+    Source_Target2.open(filename2.c_str());
 
     if(Source_Target1)
     {
         do
         {
             cout << "Enter answers as they are written normally." << endl;
-            int repeat = 0,
+            cout << "You can leave the game. You have to write only 'Exit'." << endl;
+            int repeat = 0;
             *p_nextlevel = false;
             nextquestion = false;
             *p_Game_ON = true;
@@ -604,9 +606,12 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
             getline(Source_Target1, Question);
             getline(Source_Target2, Answers);
 
+
+
             do
             {
                 falseanswer = false;
+
                 if(Question.size() == 0)
                 {
                     *p_nextlevel = true;
@@ -730,7 +735,7 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
 
 void Credits_Zeruxky()
 {
-    cout << "Oneplus One Quiz V.1.0.0" << endl;
+    cout << "Oneplus One Quiz V.1.0.1" << endl;
     cout << "Oneplus One Quiz! made by Zeruxky at 04/20/2014." << endl;
     cout << "The name 'Oneplus' and 'Oneplus One' are reserved to Oneplus." << endl;
     cout << "This program is not commercial. It's a free, open - source Game." << endl;
