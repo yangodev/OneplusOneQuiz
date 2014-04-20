@@ -105,6 +105,7 @@ void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
             int repeat = 0;
             *p_nextlevel = false;
             nextquestion = false;
+            *p_go_menu = false;
 
             getline(Source1, Question);
             getline(Source2, Answers);
@@ -121,13 +122,12 @@ void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                     if(toupper(Entry_yesORno) == 'Y')
                     {
                         *p_nextlevel = true;
+                        *p_Game_ON = true;
                     }
 
                     else
                     {
                         *p_go_menu = true;
-                        *p_Game_ON = false;
-                        *p_nextlevel = true;
                     }
 
                 }
@@ -221,12 +221,16 @@ void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                     }
                 }
 
+
                 else
                 {
-                    cout << "Failurenumber #469" << endl;
+                    if(*p_nextlevel != true)
+                    {
+                        cout << "Failurenumber #469" << endl;
 
-                    cout << "Source file not found!" << endl;
+                        cout << "Source file not found!" << endl;
 
+                    }
                 }
 
                 if(falseanswer != true)
@@ -270,7 +274,7 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
     fstream Target2;
     Target1.open(filename3.c_str(), ios::out);
     Target2.open(filename4.c_str(), ios::out);
-
+    *p_nextlevel = false;
     if(Source1)
     {
         do
@@ -278,7 +282,7 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
             cout << "Enter answers as they are written normally." << endl;
             cout << "You can leave the game. You have to write only 'Exit'." << endl;
             int repeat = 0;
-            *p_nextlevel = false;
+
             nextquestion = false;
 
             getline(Source1, Question);
@@ -287,6 +291,7 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
             do
             {
                 falseanswer = false;
+
                 if(Question.size() == 0)
                 {
                     cout << "Do you want to go next level? [Y/N]" << endl;
@@ -294,7 +299,8 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
 
                     if(toupper(Entry_yesORno) == 'Y')
                     {
-                        *p_nextlevel == true;
+                        *p_nextlevel = true;
+                        *p_Game_ON = true;
                     }
 
                     else
@@ -401,7 +407,10 @@ void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                     cout << "Source file not found!" << endl;
                 }
 
-                counternumber++;
+                if(falseanswer != true)
+                {
+                    counternumber++;
+                }
 
             }while(falseanswer == true&&repeat < 5&&*p_Game_ON == true&&*p_nextlevel != true);
 
@@ -445,7 +454,7 @@ void Game_Hard(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
         {
             cout << "Enter answers as they are written normally." << endl;
             cout << "You can leave the game. You have to write only 'Exit'." << endl;
-            int repeat = 0,
+            int repeat = 0;
             *p_nextlevel = false;
             nextquestion = false;
 
@@ -461,87 +470,90 @@ void Game_Hard(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                     *p_nextlevel = true;
                 }
 
-                if(Source2&&*p_nextlevel != true)
+                if(Source2)
                 {
-                    cout << counternumber << ". " << Question << endl;
-
-                    cout << "Entry: ";
-
-                    cin >> entry;
-
-                    if(entry == Answers)
+                    if(*p_nextlevel != true)
                     {
-                        nextquestion = true;
-                        for(int i = 1; i < counternumber; i++)
+                        cout << counternumber << ". " << Question << endl;
+
+                        cout << "Entry: ";
+
+                        cin >> entry;
+
+                        if(entry == Answers)
                         {
-                            if(counternumber == (i*5))
+                            nextquestion = true;
+                            for(int i = 1; i < counternumber; i++)
                             {
-                                system("cls");
+                                if(counternumber == (i*5))
+                                {
+                                    system("cls");
+                                }
                             }
                         }
-                    }
 
-                    if(entry != Answers)
-                    {
-                        falseanswer = true;
-                        repeat++;
-                    }
-
-                    if(repeat == 5)
-                    {
-                        system("cls");
-                        cout << "You have not done it! Try again!" << endl;
-                        repeat = 0;
-                    }
-
-                    if(entry == "Exit")
-                    {
-                        *p_Game_ON = false;
-
-                        char yesORno;
-
-                        cout << "Want to save your score to make later on there? [Y/N]" << endl;
-                        cin >> yesORno;
-
-                        if(toupper(yesORno) == 'Y')
+                        if(entry != Answers)
                         {
-                            Target1 << Question << endl; //Save the Question right now.
-                            Target2 << Answers << endl;
-
-                            while(getline(Source1, Question))
-                            {
-                                if(!Target1.good())
-                                {
-                                    Target1.clear();
-                                    cout << "Dateifehler/File error";
-                                }
-
-                                else
-                                {
-                                    Target1 << Question << endl;
-                                }
-                            }
-                            cout << "Saving Questions was successfully." << endl;
-
-
-                            while(getline(Source2, Answers))
-                            {
-                                if(!Target2.good())
-                                {
-                                    Target2.clear();
-                                    cout << "Dateifehler/File error";
-                                }
-
-                                else
-                                {
-                                    Target2 << Answers << endl;
-                                }
-                            }
-                            cout << "Saving Answers was successfully." << endl;
-
+                            falseanswer = true;
+                            repeat++;
                         }
-                        Target1.close();
-                        Target2.close();
+
+                        if(repeat == 5)
+                        {
+                            system("cls");
+                            cout << "You have not done it! Try again!" << endl;
+                            repeat = 0;
+                        }
+
+                        if(entry == "Exit")
+                        {
+                            *p_Game_ON = false;
+
+                            char yesORno;
+
+                            cout << "Want to save your score to make later on there? [Y/N]" << endl;
+                            cin >> yesORno;
+
+                            if(toupper(yesORno) == 'Y')
+                            {
+                                Target1 << Question << endl; //Save the Question right now.
+                                Target2 << Answers << endl;
+
+                                while(getline(Source1, Question))
+                                {
+                                    if(!Target1.good())
+                                    {
+                                        Target1.clear();
+                                        cout << "Dateifehler/File error";
+                                    }
+
+                                    else
+                                    {
+                                        Target1 << Question << endl;
+                                    }
+                                }
+                                cout << "Saving Questions was successfully." << endl;
+
+
+                                while(getline(Source2, Answers))
+                                {
+                                    if(!Target2.good())
+                                    {
+                                        Target2.clear();
+                                        cout << "Dateifehler/File error";
+                                    }
+
+                                    else
+                                    {
+                                        Target2 << Answers << endl;
+                                    }
+                                }
+                                cout << "Saving Answers was successfully." << endl;
+
+                            }
+                            Target1.close();
+                            Target2.close();
+                        }
                     }
                 }
 
@@ -552,7 +564,10 @@ void Game_Hard(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                     cout << "Source file not found!" << endl;
                 }
 
-                counternumber++;
+                if(falseanswer != true)
+                {
+                    counternumber++;
+                }
 
             }while(falseanswer == true&&repeat < 5&&*p_Game_ON == true&&*p_nextlevel != true);
 
@@ -715,7 +730,10 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
                     cout << "Source file not found!" << endl;
                 }
 
-                counternumber++;
+                if(falseanswer != true)
+                {
+                    counternumber++;
+                }
 
             }while(falseanswer == true&&repeat < 5&&*p_Game_ON == true&&*p_nextlevel != true);
 
