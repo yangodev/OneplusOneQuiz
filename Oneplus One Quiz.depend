@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1397996407 source:d:\eigene projekte\oneplus one quiz\oneplus one quiz\main.cpp
+	"Oneplus One Quiz_header.h"
+
+1397993774 d:\eigene projekte\oneplus one quiz\oneplus one quiz\oneplus one quiz_header.h
+	<iostream>
+	<windows.h>
+	<string>
+	<stdlib.h>
+	<fstream>
+
+1397996704 source:d:\eigene projekte\oneplus one quiz\oneplus one quiz\oneplus one quiz_functions.cpp
+	"Oneplus One Quiz_header.h"
+
+1397996407 source:d:\eigene projekte\oneplus one quiz\oneplus one quiz (english)\main.cpp
+	"Oneplus One Quiz_header.h"
+
+1397993774 d:\eigene projekte\oneplus one quiz\oneplus one quiz (english)\oneplus one quiz_header.h
+	<iostream>
+	<windows.h>
+	<string>
+	<stdlib.h>
+	<fstream>
+
