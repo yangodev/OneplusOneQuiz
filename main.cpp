@@ -35,18 +35,18 @@ int main()
                         {
                             case Easy:
                                 {
-                                    Game_Easy(&Game_ON, &nextlevel, &go_menu);
+                                    Game(&Game_ON, &nextlevel, &go_menu, difficulty, Easy, Medium, Hard);
 
                                 }break;
 
                             case Medium:
                                 {
-                                    Game_Medium(&Game_ON, &nextlevel, &go_menu);
+                                    Game(&Game_ON, &nextlevel, &go_menu, difficulty, Easy, Medium, Hard);
                                 }break;
 
                             case Hard:
                                 {
-                                    Game_Hard(&Game_ON, &nextlevel, &go_menu);
+                                   Game(&Game_ON, &nextlevel, &go_menu, difficulty, Easy, Medium, Hard);
                                     if(nextlevel == true)
                                     {
                                         end_of_Game(&go_menu);

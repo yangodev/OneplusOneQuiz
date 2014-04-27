@@ -74,16 +74,35 @@ int mainmenu()
     return(number);
 }
 
-void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
+void Game(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu, int difficulty, int Easy, int Medium, int Hard)
 {
     bool falseanswer, nextquestion;
     int counternumber = 1;
     char Entry_yesORno;
-    string filename1 = "Easy.txt";
-    string filename2 = "Easy_Answers.txt";
-    string Question;
     string entry;
     string Answers;
+    string Question;
+    string filename1;
+    string filename2;
+
+    if(difficulty == Easy)
+    {
+        filename1 = "Easy_Questions.txt";
+        filename2 = "Easy_Answers.txt";
+    }
+
+    if(difficulty == Medium)
+    {
+        filename1 = "Medium_Questions.txt";
+        filename2 = "Medium_Answers.txt";
+    }
+
+    if(difficulty == Hard)
+    {
+        filename1 = "Hard_Questions.txt";
+        filename2 = "Hard_Answers.txt";
+    }
+
     fstream Source1;
     fstream Source2;
     Source1.open(filename1.c_str(), ios::in);
@@ -145,12 +164,9 @@ void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
                         if(entry == Answers)
                         {
                             nextquestion = true;
-                            for(int i = 1; i < counternumber; i++)
+                            if(counternumber%5 == 0)
                             {
-                                if(counternumber == (i*5))
-                                {
-                                    system("cls");
-                                }
+                                system("cls");
                             }
                         }
 
@@ -254,337 +270,6 @@ void Game_Easy(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
     }
 }
 
-void Game_Medium(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
-{
-    bool falseanswer, nextquestion;
-    char Entry_yesORno;
-    int counternumber = 1, length;
-    string filename1 = "Medium.txt";
-    string filename2 = "Medium_Answers.txt";
-    string Question;
-    string entry;
-    string Answers;
-    fstream Source1;
-    fstream Source2;
-    Source1.open(filename1.c_str(), ios::in);
-    Source2.open(filename2.c_str(), ios::in);
-    string filename3 = "Save_Question.txt";
-    string filename4 = "Save_Answers.txt";
-    fstream Target1;
-    fstream Target2;
-    Target1.open(filename3.c_str(), ios::out);
-    Target2.open(filename4.c_str(), ios::out);
-    *p_nextlevel = false;
-    if(Source1)
-    {
-        do
-        {
-            cout << "Enter answers as they are written normally." << endl;
-            cout << "You can leave the game. You have to write only 'Exit'." << endl;
-            int repeat = 0;
-
-            nextquestion = false;
-
-            getline(Source1, Question);
-            getline(Source2, Answers);
-
-            do
-            {
-                falseanswer = false;
-
-                if(Question.size() == 0)
-                {
-                    cout << "Do you want to go next level? [Y/N]" << endl;
-                    cin >> Entry_yesORno;
-
-                    if(toupper(Entry_yesORno) == 'Y')
-                    {
-                        *p_nextlevel = true;
-                        *p_Game_ON = true;
-                    }
-
-                    else
-                    {
-                        *p_Game_ON = false;
-                    }
-                }
-
-                if(Source2)
-                {
-                    if(*p_nextlevel != true)
-                     {
-
-                        cout << counternumber << ". " << Question << endl;
-
-                        cout << "Entry: ";
-
-                        cin >> entry;
-
-                        if(entry == Answers)
-                        {
-                            nextquestion = true;
-                            for(int i = 1; i < counternumber; i++)
-                            {
-                                if(counternumber == (i*5))
-                                {
-                                    system("cls");
-                                }
-                            }
-
-                        }
-
-                        if(entry != Answers)
-                        {
-                            falseanswer = true;
-                            repeat++;
-                        }
-
-                        if(repeat == 5)
-                        {
-                            system("cls");
-                            cout << "You have not done it! Try again!" << endl;
-                            repeat = 0;
-                        }
-
-                        if(entry == "Exit")
-                        {
-                            *p_Game_ON = false;
-
-                            char yesORno;
-
-                            cout << "Want to save your score to make later on there? [Y/N]" << endl;
-                            cin >> yesORno;
-
-                            if(toupper(yesORno) == 'Y')
-                            {
-                                Target1 << Question << endl; //Save the Question right now.
-                                Target2 << Answers << endl;
-
-                                while(getline(Source1, Question))
-                                {
-                                    if(!Target1.good())
-                                    {
-                                        Target1.clear();
-                                        cout << "Dateifehler/File error";
-                                    }
-
-                                    else
-                                    {
-                                        Target1 << Question << endl;
-                                    }
-                                }
-                                cout << "Saving Questions was successfully." << endl;
-
-
-                                while(getline(Source2, Answers))
-                                {
-                                    if(!Target2.good())
-                                    {
-                                        Target2.clear();
-                                        cout << "Dateifehler/File error";
-                                    }
-
-                                    else
-                                    {
-                                        Target2 << Answers << endl;
-                                    }
-                                }
-                                cout << "Saving Answers was successfully." << endl;
-
-                            }
-                            Target1.close();
-                            Target2.close();
-
-                        }
-
-                    }
-                }
-
-                else
-                {
-                    cout << "Failurenumber #469" << endl;
-
-                    cout << "Source file not found!" << endl;
-                }
-
-                if(falseanswer != true)
-                {
-                    counternumber++;
-                }
-
-            }while(falseanswer == true&&repeat < 5&&*p_Game_ON == true&&*p_nextlevel != true);
-
-        }while(nextquestion == true&&*p_Game_ON == true&&*p_nextlevel != true);
-        Source1.close();
-        Source2.close();
-
-    }
-
-    else
-    {
-        cout << "Failurenumber #469" << endl;
-
-        cout << "Source file not found!" << endl;
-    }
-}
-
-void Game_Hard(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu)
-{
-    bool nextquestion, falseanswer;
-    int counternumber = 1;
-    string filename1 = "Hard.txt";
-    string filename2 = "Hard_Answers.txt";
-    string Question;
-    string entry;
-    string Answers;
-    fstream Source1;
-    fstream Source2;
-    Source1.open(filename1.c_str(), ios::in);
-    Source2.open(filename2.c_str(), ios::in);
-    string filename3 = "Save_Question.txt";
-    string filename4 = "Save_Answers.txt";
-    fstream Target1;
-    fstream Target2;
-    Target1.open(filename3.c_str(), ios::out);
-    Target2.open(filename4.c_str(), ios::out);
-
-    if(Source1)
-    {
-        do
-        {
-            cout << "Enter answers as they are written normally." << endl;
-            cout << "You can leave the game. You have to write only 'Exit'." << endl;
-            int repeat = 0;
-            *p_nextlevel = false;
-            nextquestion = false;
-
-            getline(Source1, Question);
-            getline(Source2, Answers);
-
-            do
-            {
-                falseanswer = false;
-
-                if(Question.size() == 0)
-                {
-                    *p_nextlevel = true;
-                }
-
-                if(Source2)
-                {
-                    if(*p_nextlevel != true)
-                    {
-                        cout << counternumber << ". " << Question << endl;
-
-                        cout << "Entry: ";
-
-                        cin >> entry;
-
-                        if(entry == Answers)
-                        {
-                            nextquestion = true;
-                            for(int i = 1; i < counternumber; i++)
-                            {
-                                if(counternumber == (i*5))
-                                {
-                                    system("cls");
-                                }
-                            }
-                        }
-
-                        if(entry != Answers)
-                        {
-                            falseanswer = true;
-                            repeat++;
-                        }
-
-                        if(repeat == 5)
-                        {
-                            system("cls");
-                            cout << "You have not done it! Try again!" << endl;
-                            repeat = 0;
-                        }
-
-                        if(entry == "Exit")
-                        {
-                            *p_Game_ON = false;
-
-                            char yesORno;
-
-                            cout << "Want to save your score to make later on there? [Y/N]" << endl;
-                            cin >> yesORno;
-
-                            if(toupper(yesORno) == 'Y')
-                            {
-                                Target1 << Question << endl; //Save the Question right now.
-                                Target2 << Answers << endl;
-
-                                while(getline(Source1, Question))
-                                {
-                                    if(!Target1.good())
-                                    {
-                                        Target1.clear();
-                                        cout << "Dateifehler/File error";
-                                    }
-
-                                    else
-                                    {
-                                        Target1 << Question << endl;
-                                    }
-                                }
-                                cout << "Saving Questions was successfully." << endl;
-
-
-                                while(getline(Source2, Answers))
-                                {
-                                    if(!Target2.good())
-                                    {
-                                        Target2.clear();
-                                        cout << "Dateifehler/File error";
-                                    }
-
-                                    else
-                                    {
-                                        Target2 << Answers << endl;
-                                    }
-                                }
-                                cout << "Saving Answers was successfully." << endl;
-
-                            }
-                            Target1.close();
-                            Target2.close();
-                        }
-                    }
-                }
-
-                else
-                {
-                    cout << "Failurenumber #469" << endl;
-
-                    cout << "Source file not found!" << endl;
-                }
-
-                if(falseanswer != true)
-                {
-                    counternumber++;
-                }
-
-            }while(falseanswer == true&&repeat < 5&&*p_Game_ON == true&&*p_nextlevel != true);
-
-        }while(nextquestion == true&&*p_Game_ON == true&&*p_nextlevel != true);
-        Source1.close();
-        Source2.close();
-
-    }
-
-    else
-    {
-        cout << "Failurenumber #469" << endl;
-
-        cout << "Source file not found!" << endl;
-    }
-}
-
 void end_of_Game(bool *p_go_menu)
 {
     cout << "Congratulation!" << endl;
@@ -621,8 +306,6 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
             getline(Source_Target1, Question);
             getline(Source_Target2, Answers);
 
-
-
             do
             {
                 falseanswer = false;
@@ -649,12 +332,9 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
                         if(entry == Answers)
                         {
                             nextquestion = true;
-                            for(int i = 1; i < counternumber; i++)
+                            if(counternumber%5 == 0)
                             {
-                                if(counternumber == (i*5))
-                                {
-                                    system("cls");
-                                }
+                                system("cls");
                             }
                         }
 
@@ -749,12 +429,12 @@ void loading_Game(bool *p_Game_ON, bool *p_go_menu,  bool *p_nextlevel)
 
         cout << "Source file not found!" << endl;
     }
-}
+};
 
 void Credits_Zeruxky()
 {
-    cout << "Oneplus One Quiz V.1.0.1" << endl;
-    cout << "Oneplus One Quiz! made by Zeruxky at 04/20/2014." << endl;
+    cout << "Oneplus One Quiz V.1.0.2" << endl;
+    cout << "Oneplus One Quiz! made by Zeruxky at 04/27/2014." << endl;
     cout << "The name 'Oneplus' and 'Oneplus One' are reserved to Oneplus." << endl;
     cout << "This program is not commercial. It's a free, open - source Game." << endl;
     cout << "Made by a proud fan of the Oneplus One!" << endl;
