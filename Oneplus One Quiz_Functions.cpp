@@ -168,9 +168,7 @@ void Game(bool *p_Game_ON, bool *p_nextlevel, bool *p_go_menu, int difficulty, i
                             {
                                 system("cls");
                             }
-                        }
-
-                        if(entry != Answers)
+                        }else
                         {
                             falseanswer = true;
                             repeat++;
